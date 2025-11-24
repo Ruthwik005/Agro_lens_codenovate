@@ -40,3 +40,39 @@ pipeline {
         }
     }
 }
+
+
+
+
+//Working with Minikube (Nginx Service Deployment)	
+minikube start
+minikube status
+
+kubectl create deployment nginx-deploy --image=nginx
+kubectl get pods
+
+kubectl expose deployment nginx-deploy --port=80 --target-port=80
+kubectl get svc
+
+kubectl port-forward svc/nginx-deploy 8090:80
+# Open browser: http://localhost:8090
+
+# New Terminal
+kubectl get pods
+kubectl get svc
+
+q3
+//Monitoring Tool – Nagios
+docker pull jasonrivers/nagios
+docker run --name nagios -d -p 8080:80 jasonrivers/nagios
+docker ps
+
+# If "name already in use"
+docker rm -f nagios
+
+# If port is in use
+netstat -ano | findstr :8080
+taskkill /PID <PID> /F
+
+# Alternative port
+docker run --name nagios -d -p 8090:80 jasonrivers/nagios
