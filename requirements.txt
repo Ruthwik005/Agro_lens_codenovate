@@ -83,7 +83,7 @@ docker run --name nagios -d -p 8090:80 jasonrivers/nagios
 
 
 //user name = nagiosadmin
-//password = magios
+//password = nagios
 
 
 
