@@ -1,3 +1,7 @@
+https://github.com/Achilles007-AD/Services
+https://github.com/KumaraswamyBakkashetti/login-app1/edit/main/requirements.txt
+
+
 pipeline {
     agent any
 
