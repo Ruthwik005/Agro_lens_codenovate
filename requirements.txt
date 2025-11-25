@@ -134,3 +134,131 @@ Test improvement
 Test regression
 Unstable (test failure)
 Failure → Success
+
+
+
+
+
+
+
+
+//jenkins
+===== JENKINS JOB: maven-my-app =====
+
+Project Type:
+  freestyle project
+
+GIT:
+  add url
+  */main
+
+===== BUILD STEPS =====
+1) Invoke top-level Maven targets
+     MAVEN_HOME
+     Goals: clean
+
+2) Invoke top-level Maven targets
+     MAVEN_HOME
+     Goals: install
+
+===== POST BUILD ACTION =====
+Archive the artifacts:
+     **/*
+
+===== POST BUILD ACTION =====
+Build other projects:
+     maven-test    (next one name)
+
+===== SAVE =====
+Triggered only if build is stable
+
+*************************************************
+
+===== NEW ITEM =====
+Name: maven-test
+Type: Freestyle project
+OK
+
+SCM:
+  None
+
+===== ENVIRONMENT =====
+Delete workspace before build starts
+
+===== ADD BUILD STEPS =====
+1) Copy artifacts from other projects
+       (this is a plugin, install if not available)
+       Specify project name (the one we built earlier)
+       Artifacts to copy: **/*
+
+2) Invoke top-level Maven targets
+       MAVEN_HOME
+       Goals: test
+
+===== POST BUILD ACTION =====
+Archive the artifacts (plugin)
+       Files: **/*
+
+===== POST BUILD ACTION =====
+Build other projects (plugin)
+       Project: maven-deploy  (next one in chain)
+
+===== SAVE =====
+
+***********************************************************************
+===== NEW ITEM =====
+Name: maven-deploy
+Type: Freestyle project
+
+Select None
+
+Environment:
+  Delete workspace before starts
+
+===== ADD BUILD STEPS =====
+Copy artifacts from another project
+  Project: maven-test
+  Artifacts to copy: **/*
+
+maven-test
+
+Artifact to copy:
+  **/*
+
+===== POST-BUILD =====
+Deploy war/ear to a container (plugin)
+
+WAR/EAR Files:
+  **/*.war
+
+Context path:
+  <our wish name>
+
+Add containers:
+  Tomcat 9.x remote
+
+Tomcat URL:
+  http://localhost:8081/    (changed and use)
+
+===== CREDENTIALS =====
+admin / ******   → that I gave
+Save
+
+===== RUN MY-APP =====
+Run my-app
+  test + deploying will run automatically
+
+
+*****************************************************
+
+===== NEW ITEM =====
+pipeline
+ type: pipeline
+OK
+
+
+===== SCRIPT FILE =====
+Paste code
+Save
+
+Build Now
